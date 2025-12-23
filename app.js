@@ -29,6 +29,17 @@ const elSearch = document.getElementById("search");
 
 const btnNewWorkout = document.getElementById("btnNewWorkout");
 const btnClearWeek = document.getElementById("btnClearWeek");
+const goalSelect = document.getElementById("goalSelect");
+const btnGenerate = document.getElementById("btnGenerate");
+
+if (btnGenerate && goalSelect) {
+    btnGenerate.addEventListener("click", () => {
+      const goal = goalSelect.value;
+      plan = generatePlan(goal);
+      savePlan(plan);
+      renderWeek();
+    });
+  }
 
 const modal = document.getElementById("modal");
 const backdrop = document.getElementById("modalBackdrop");
@@ -39,6 +50,9 @@ const wName = document.getElementById("wName");
 const wCategory = document.getElementById("wCategory");
 const wDuration = document.getElementById("wDuration");
 const wNotes = document.getElementById("wNotes");
+//const goalSelect = document.getElementById("goalSelect");
+//const btnGenerate = document.getElementById("btnGenerate");
+
 
 // ---------- Init ----------
 renderWeek();
@@ -290,3 +304,135 @@ function escapeHtml(str) {
     "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
   }[m]));
 }
+
+
+function generatePlan(goal) {
+    const newPlan = emptyPlan(); // <-- define FIRST
+  
+    const pick = (categories) => {
+      const set = new Set(categories);
+      let foundWorkouts = []
+      for (const w of workouts){
+        if(set.has(w.category)){
+            foundWorkouts.push(w.id)
+        }
+      }
+      return foundWorkouts
+    };
+  
+    const add = (day, workoutIds) => {
+        //console.log("ADDING", day, workoutIds);
+        //console.log("type:", Array.isArray(workoutIds) ? "array" : typeof workoutIds);
+
+      if (workoutIds.length == 0) return;
+      let workoutIndex = Math.floor(Math.random() * (workoutIds.length))
+      let id = workoutIds[workoutIndex]
+      newPlan[day].push({ workoutId: id });
+    };
+  
+    const legs = pick(["Legs"]);
+    const arms = pick(["Arms"]);
+    const back = pick(["Back", "Shoulders"]);
+    const core = pick(["Core", "Pilates"]);
+    const pilates = pick(["Pilates"]);
+    const flex = pick(["Flexibility"]);
+    const cardio = pick(["Cardio"]);
+    const rest = pick(["Rest"]);
+  
+    if (goal === "glutes") {
+      add("Mon", legs);
+      add("Tue", back);
+      add("Wed", pilates);
+      add("Thu", legs);
+      add("Fri", arms);
+      add("Sat", cardio);
+      add("Sun", flex);
+    } else if (goal === "balanced") {
+      add("Mon", legs);
+      add("Tue", arms);
+      add("Wed", cardio);
+      add("Thu", back);
+      add("Fri", core);
+      add("Sat", flex);
+      add("Sun", rest);
+    } else if (goal === "mobility") {
+      add("Mon", flex);
+      add("Tue", pilates);
+      add("Wed", cardio);
+      add("Thu", flex);
+      add("Fri", core);
+      add("Sat", pilates);
+      add("Sun", rest);
+    } else if (goal === "lean") {
+      add("Mon", cardio);
+      add("Tue", legs);
+      add("Wed", cardio);
+      add("Thu", back);
+      add("Fri", cardio);
+      add("Sat", pilates);
+      add("Sun", rest);
+    }
+  
+    return newPlan;
+  }
+  
+/*
+function generatePlan(goal) {
+    const newPlan = emptyPlan(); // <-- define FIRST
+  
+    const pick = (categories) => {
+      const set = new Set(categories);
+      return workouts.find(w => set.has(w.category))?.id || null;
+    };
+  
+    const add = (day, workoutId) => {
+      if (!workoutId) return;
+      newPlan[day].push({ workoutId });
+    };
+  
+    const legs = pick(["Legs"]);
+    const arms = pick(["Arms"]);
+    const back = pick(["Back", "Shoulders"]);
+    const core = pick(["Core", "Pilates"]);
+    const pilates = pick(["Pilates"]);
+    const flex = pick(["Flexibility"]);
+    const cardio = pick(["Cardio"]);
+    const rest = pick(["Rest"]);
+  
+    if (goal === "glutes") {
+      add("Mon", legs);
+      add("Tue", back);
+      add("Wed", pilates);
+      add("Thu", legs);
+      add("Fri", arms);
+      add("Sat", cardio);
+      add("Sun", flex);
+    } else if (goal === "balanced") {
+      add("Mon", legs);
+      add("Tue", arms);
+      add("Wed", cardio);
+      add("Thu", back);
+      add("Fri", core);
+      add("Sat", flex);
+      add("Sun", rest);
+    } else if (goal === "mobility") {
+      add("Mon", flex);
+      add("Tue", pilates);
+      add("Wed", cardio);
+      add("Thu", flex);
+      add("Fri", core);
+      add("Sat", pilates);
+      add("Sun", rest);
+    } else if (goal === "lean") {
+      add("Mon", cardio);
+      add("Tue", legs);
+      add("Wed", cardio);
+      add("Thu", back);
+      add("Fri", cardio);
+      add("Sat", pilates);
+      add("Sun", rest);
+    }
+  
+    return newPlan;
+  }
+  */

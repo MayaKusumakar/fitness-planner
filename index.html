@@ -38,10 +38,23 @@
     </aside>
 
     <section class="board">
-      <div class="board-header">
-        <h2>This Week</h2>
-        <div class="small">Click an item in a day to remove</div>
-      </div>
+        <div class="board-header">
+            <div>
+              <h2>This Week</h2>
+              <div class="small">Click an item in a day to remove</div>
+            </div>
+          
+            <div class="gen-controls">
+              <select id="goalSelect" class="input input-small">
+                <option value="glutes">Glute growth</option>
+                <option value="balanced">Balanced strength</option>
+                <option value="mobility">Mobility + splits</option>
+                <option value="lean">Lean + cardio</option>
+              </select>
+              <button id="btnGenerate" class="btn btn-primary">Generate Week</button>
+            </div>
+          </div>
+
 
       <div id="week" class="week-grid"></div>
     </section>

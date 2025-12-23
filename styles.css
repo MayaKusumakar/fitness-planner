@@ -240,4 +240,15 @@
     .layout{ grid-template-columns: 1fr; }
     .week-grid{ grid-template-columns: repeat(2, minmax(140px, 1fr)); }
   }
+
+  .gen-controls{
+    display:flex;
+    gap:10px;
+    align-items:center;
+  }
+  
+  .input-small{
+    width: 190px;
+    padding: 10px 10px;
+  }
   
